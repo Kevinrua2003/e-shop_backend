@@ -27,6 +27,12 @@ export class OrderController {
     return this.orderService.findOne(id);
   }
 
+  @Get('/byUser/:userId')
+  @ApiOperation({ summary: 'Obtener ordenes por id de ususario' })
+  findByUser(@Param('userId') userId: string) {
+    return this.orderService.findByUser(userId);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar una orden por id' })
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {

@@ -36,7 +36,6 @@ export class AuthGuard extends NestAuthGuard('jwt') {
 
   getRequest(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
-    // Extrae el token de las cookies y lo asigna al header Authorization
     if (req.cookies && req.cookies.token) {
       req.headers.authorization = `Bearer ${req.cookies.token}`;
     }

@@ -20,6 +20,10 @@ export class OrderService {
     return this.prisma.order.findUnique({where: {id}});
   }
 
+  async findByUser(userId: string) {
+    return await this.prisma.order.findMany({where: {userId}});
+  }
+
   async update(id: string, updateOrderDto: UpdateOrderDto) {
     return await this.prisma.order.update({where: {id}, data: updateOrderDto});
   }

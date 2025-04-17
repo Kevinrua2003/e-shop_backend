@@ -27,6 +27,12 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
+  @Get('most/expensive')
+  @ApiOperation({ summary: 'Obtener el producto mas caro' })
+  findExpensive() {
+    return this.productService.findExpensive();
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar un producto por id' })
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {

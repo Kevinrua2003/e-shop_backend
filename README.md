@@ -97,3 +97,135 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Guía Completa para Desarrollar un Backend
+
+Esta guía te mostrará cómo desarrollar un backend desde cero, paso a paso.
+
+### Paso 1: Preparación y Requisitos
+- Instala Node.js (preferentemente la versión LTS) y pnpm o npm.
+- Instala el Nest CLI globalmente:
+  ```bash
+  npm install -g @nestjs/cli
+  ```
+- Prepara una base de datos PostgreSQL u otra de tu preferencia.
+- Configura un entorno de desarrollo (VSCode, Git, etc).
+
+### Paso 2: Inicialización del Proyecto
+- Crea un nuevo proyecto usando Nest CLI:
+  ```bash
+  nest new proyecto_backend
+  ```
+- Ingresa al directorio del proyecto:
+  ```bash
+  cd proyecto_backend
+  ```
+- Instala Prisma y sus dependencias:
+  ```bash
+  pnpm add prisma @prisma/client
+  pnpm prisma init
+  ```
+- Configura el archivo ".env" agregando la URL de conexión a la base de datos.
+
+### Paso 3: Configuración de la Base de Datos y Prisma
+- Define tu modelo de datos en "prisma/schema.prisma". Ejemplo:
+  ```prisma
+  model User {
+    id    String @id @default(uuid())
+    name  String
+    email String @unique
+    // ...otros campos si es necesario...
+  }
+  ```
+- Ejecuta la migración de Prisma:
+  ```bash
+  pnpm prisma migrate dev --name init
+  ```
+
+### Paso 4: Creación de Módulos y Estructura del Proyecto
+- Genera los módulos necesarios:
+  ```bash
+  nest generate module user
+  nest generate module product
+  nest generate module order
+  nest generate module order-item
+  nest generate module auth
+  ```
+- Dentro de cada módulo, crea controladores y servicios:
+  ```bash
+  nest generate controller user
+  nest generate service user
+  ```
+- Organiza la estructura de carpetas para mantener un código modular y mantenible.
+
+### Paso 5: Implementación de Servicios y Controladores
+- En los servicios, implementa la lógica de negocio utilizando Prisma; por ejemplo, en "src/user/user.service.ts":
+  ```ts
+  async create(createUserDto: CreateUserDto) {
+    return await this.prisma.user.create({ data: createUserDto });
+  }
+  ```
+- Define endpoints REST en los controladores y asegúrate de inyectar correctamente los servicios.
+
+### Paso 6: Autenticación y Seguridad
+
+Esta sección está basada en la implementación de autenticación y seguridad desarrollada en este proyecto y cubre los siguientes aspectos:
+
+1. Instalación y librerías:  
+   Se utilizan las siguientes librerías para gestionar JWT, estrategias de Passport, manejo de contraseñas y cookies:
+   ```bash
+   pnpm add @nestjs/jwt passport passport-jwt bcrypt cookie-parser
+   ```
+
+2. Configuración del módulo de autenticación:  
+   Se crea un módulo en "src/auth/auth.module.ts" que importa:
+   - JwtModule configurado con un secreto y opciones de expiración.
+   - PassportModule para gestionar estrategias de autenticación.
+   - El AuthService, que se encarga de validar usuarios, generar tokens (en "src/auth/auth.service.ts") y registrar nuevos usuarios con contraseña encriptada usando bcrypt.
+
+3. Estrategia JWT y Guard:  
+   - Se define un JWT Strategy (por ejemplo, en "src/auth/jwt.strategy.ts") para extraer el token desde los headers o cookies.
+   - Se implementa un AuthGuard (ver "src/auth/auth.guard.ts") que utiliza Passport para verificar el token.  
+     Este guard extrae el token:
+       - Primero desde las cookies (configuradas en "src/main.ts" mediante cookie-parser).
+       - Luego desde el header "Authorization" si no se encuentra en las cookies.
+     Si el token es válido, se inyecta la información del usuario en la request.
+
+4. Manejo de inicio de sesión, registro y logout:  
+   - El endpoint de login en "src/auth/auth.controller.ts" utiliza el AuthService para:
+     - Validar las credenciales comparando la contraseña proporcionada con el hash almacenado (bcrypt).
+     - Generar un token JWT con datos del usuario (id, nombre, rol) y enviarlo mediante una cookie segura (httpOnly, secure en producción).
+   - El endpoint de registro crea un nuevo usuario, aplicando bcrypt para hashear la contraseña.
+   - El endpoint de logout limpia la cookie de autenticación.
+
+5. Protección de rutas:  
+   - Se utilizan Guards en rutas sensibles. Por ejemplo, en "src/auth/auth.controller.ts" se protege el endpoint que devuelve la información del usuario usando `@UseGuards(AuthGuard)`.
+   - En otros módulos, se puede aplicar el mismo guard (por ejemplo, descomentando la línea `@UseGuards(AuthGuard)` en "src/user/user.controller.ts") para restringir el acceso.
+
+6. Consideraciones adicionales de seguridad:  
+   - El uso de pipes de validación globales (en "src/main.ts") y DTOs asegura que los datos recibidos sean sanitizados.
+   - La configuración de CORS y variables de entorno (por ejemplo, JWT_SECRET en ".env") ayuda a mantener la seguridad en producción.
+
+Esta implementación garantiza que todo el flujo de autenticación se integre de manera coherente y segura en el proyecto, sirviendo como base para reutilizar en futuros desarrollos.
+
+### Paso 7: Validación, Pruebas y Documentación
+- Aplica un pipe de validación global (ValidationPipe) en "src/main.ts":
+  ```ts
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  ```
+- Escribe pruebas unitarias e integrales usando Jest. Revisa ejemplos en archivos como "src/product/product.service.spec.ts".
+- Integra Swagger para documentar la API:
+  ```ts
+  const config = new DocumentBuilder().setTitle('E-Commerce App').build();
+  SwaggerModule.setup('api', app, SwaggerModule.createDocument(app, config));
+  ```
+
+### Paso 8: Despliegue y Escalabilidad
+- Configura CORS, variables de entorno y ajustes de producción (ver "src/main.ts").
+- Consulta la documentación oficial de NestJS para optimizaciones y despliegue en producción.
+- Considera plataformas como Mau para desplegar en AWS.
+
+### Paso 9: Reutilización y Mantenimiento
+- Mantén una estructura modular, desacoplada y documentada.
+- Extrae configuraciones y lógica común en archivos o módulos reutilizables.
+- Utiliza el proyecto como plantilla para futuros desarrollos ajustando solo las partes específicas del dominio.
