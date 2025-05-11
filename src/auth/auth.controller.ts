@@ -35,8 +35,8 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 3600000, // 1 hora
-      path: '/', // La cookie estará disponible en todas las rutas
+      maxAge: 3600000, 
+      path: '/', 
     });
 
     return { 

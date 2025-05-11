@@ -21,7 +21,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000", // Permite solo el frontend
+    origin: ["https://e-shop-frontend-liart.vercel.app" , "http://localhost:3000"], // Permite solo el frontend
     credentials: true, // Permite el envío de cookies y headers de autenticación
   });
 
