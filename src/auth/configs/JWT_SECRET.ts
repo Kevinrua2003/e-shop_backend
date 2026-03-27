@@ -1,1 +1,0 @@
-export const JWT_SECRET = "esto hay que cambiarlo"
