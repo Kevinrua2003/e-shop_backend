@@ -16,14 +16,14 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get()
   @ApiOperation({ summary: 'Obtener listado de usuarios' })
   findAll() {
     return this.userService.findAll();
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Obtener un usuario por id' })
   findOne(@Param('id') id: string) {
@@ -42,7 +42,7 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Eliminar un usuario por id' })
   remove(@Param('id') id: string) {
