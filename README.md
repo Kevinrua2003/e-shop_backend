@@ -1,231 +1,307 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# E-Commerce Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend desarrollado con NestJS para una aplicación de comercio electrónico (e-shop). Proporciona una API RESTful completa para la gestión de usuarios, productos, pedidos y autenticación.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Descripción
 
-## Description
+Esta API permite:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Gestión de usuarios**: Registro, login, actualización y eliminación de usuarios con roles (USER, ADMIN).
+- **Gestión de productos**: CRUD completo de productos con información detallada (nombre, descripción, precio, marca, categoría, stock, imagen).
+- **Gestión de pedidos**: Creación y seguimiento de pedidos con estados de entrega.
+- **Items de pedido**: Gestión de los productos incluidos en cada pedido.
+- **Autenticación segura**: Sistema JWT con cookies HTTP-only y encriptación de contraseñas con bcrypt.
 
-## Project setup
+## Stack Tecnológico
 
-```bash
-$ pnpm install
+### Framework y Lenguaje
+
+- **NestJS** (v11): Framework progresivo de Node.js para construir aplicaciones server-side escalables.
+- **TypeScript**: Lenguaje principal con tipado estático.
+
+### Base de Datos
+
+- **PostgreSQL**: Base de datos relacional.
+- **Prisma** (v6): ORM para gestión de la base de datos con migraciones.
+
+### Autenticación y Seguridad
+
+- **JWT** (@nestjs/jwt): Tokens JWT para autenticación stateless.
+- **Passport** (@nestjs/passport): Estrategias de autenticación.
+- **bcryptjs**: Hasheo de contraseñas.
+- **cookie-parser**: Gestión de cookies HTTP-only.
+
+### Documentación
+
+- **Swagger** (@nestjs/swagger): Documentación interactiva de la API en `/api`.
+
+### Herramientas de Desarrollo
+
+- **ESLint** + **Prettier**: Linting y formateo de código.
+- **Jest**: Framework de testing.
+
+## Estructura del Proyecto
+
+```
+back/
+├── prisma/
+│   ├── schema.prisma       # Definición del modelo de datos
+│   ├── seed.ts             # Seed de datos inicial
+│   └── seed-products.ts    # Seed de productos de ejemplo
+├── src/
+│   ├── auth/               # Módulo de autenticación
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── auth.module.ts
+│   │   ├── auth.guard.ts   # Guard JWT personalizado
+│   │   └── dto/            # DTOs de autenticación
+│   ├── user/               # Módulo de usuarios
+│   │   ├── user.controller.ts
+│   │   ├── user.service.ts
+│   │   └── dto/            # DTOs de usuario
+│   ├── product/           # Módulo de productos
+│   │   ├── product.controller.ts
+│   │   ├── product.service.ts
+│   │   └── dto/            # DTOs de producto
+│   ├── order/              # Módulo de pedidos
+│   │   ├── order.controller.ts
+│   │   ├── order.service.ts
+│   │   └── dto/            # DTOs de pedido
+│   ├── order-item/         # Módulo de items de pedido
+│   │   ├── order-item.controller.ts
+│   │   ├── order-item.service.ts
+│   │   └── dto/            # DTOs de items
+│   ├── prisma.service.ts   # Servicio singleton de Prisma
+│   ├── app.module.ts       # Módulo raíz
+│   └── main.ts             # Punto de entrada
+├── test/
+│   └── app.e2e-spec.ts     # Tests e2e
+├── package.json
+├── tsconfig.json
+└── nest-cli.json
 ```
 
-## Compile and run the project
+## Modelo de Datos
 
-```bash
-# development
-$ pnpm run start
+### User
 
-# watch mode
-$ pnpm run start:dev
+| Campo          | Tipo               | Descripción           |
+| -------------- | ------------------ | --------------------- |
+| id             | UUID               | Identificador único   |
+| name           | String             | Nombre del usuario    |
+| email          | String             | Email único           |
+| hashedPassword | String             | Contraseña encriptada |
+| role           | Enum (USER, ADMIN) | Rol del usuario       |
+| orders         | Order[]            | Relación con pedidos  |
 
-# production mode
-$ pnpm run start:prod
+### Product
+
+| Campo       | Tipo    | Descripción          |
+| ----------- | ------- | -------------------- |
+| id          | UUID    | Identificador único  |
+| name        | String  | Nombre del producto  |
+| description | String? | Descripción opcional |
+| price       | Float   | Precio del producto  |
+| brand       | String  | Marca                |
+| category    | String  | Categoría            |
+| inStock     | Boolean | Disponibilidad       |
+| image       | String  | URL de la imagen     |
+
+### Order
+
+| Campo         | Tipo        | Descripción         |
+| ------------- | ----------- | ------------------- |
+| id            | UUID        | Identificador único |
+| userId        | String      | FK al usuario       |
+| amount        | Float       | Total del pedido    |
+| status        | String      | Estado del pedido   |
+| deliverStatus | String      | Estado de entrega   |
+| createDate    | DateTime    | Fecha de creación   |
+| orderItems    | OrderItem[] | Relación con items  |
+
+### OrderItem
+
+| Campo     | Tipo   | Descripción         |
+| --------- | ------ | ------------------- |
+| id        | UUID   | Identificador único |
+| orderId   | String | FK al pedido        |
+| productId | String | FK al producto      |
+| quantity  | Int    | Cantidad            |
+| price     | Float  | Precio unitario     |
+
+## Endpoints de la API
+
+### Autenticación (`/auth`)
+
+| Método | Endpoint         | Descripción              | Auth |
+| ------ | ---------------- | ------------------------ | ---- |
+| POST   | `/auth/login`    | Inicio de sesión         | No   |
+| POST   | `/auth/register` | Registro de usuario      | No   |
+| POST   | `/auth/logout`   | Cierre de sesión         | No   |
+| GET    | `/auth/user`     | Obtener info del usuario | Sí   |
+
+### Usuarios (`/user`)
+
+| Método | Endpoint             | Descripción               | Auth |
+| ------ | -------------------- | ------------------------- | ---- |
+| POST   | `/user`              | Crear usuario             | No   |
+| GET    | `/user`              | Listar usuarios           | Sí   |
+| GET    | `/user/:id`          | Obtener usuario por ID    | Sí   |
+| GET    | `/user/email/:email` | Obtener usuario por email | No   |
+| PATCH  | `/user/:id`          | Actualizar usuario        | No   |
+| DELETE | `/user/:id`          | Eliminar usuario          | Sí   |
+
+### Productos (`/product`)
+
+| Método | Endpoint                  | Descripción             | Auth |
+| ------ | ------------------------- | ----------------------- | ---- |
+| POST   | `/product`                | Crear producto          | No   |
+| GET    | `/product`                | Listar productos        | No   |
+| GET    | `/product/:id`            | Obtener producto por ID | No   |
+| GET    | `/product/most/expensive` | Producto más caro       | No   |
+| PATCH  | `/product/:id`            | Actualizar producto     | No   |
+| DELETE | `/product/:id`            | Eliminar producto       | No   |
+
+### Pedidos (`/order`)
+
+| Método | Endpoint                | Descripción           | Auth |
+| ------ | ----------------------- | --------------------- | ---- |
+| POST   | `/order`                | Crear pedido          | No   |
+| GET    | `/order`                | Listar pedidos        | No   |
+| GET    | `/order/:id`            | Obtener pedido por ID | No   |
+| GET    | `/order/byUser/:userId` | Pedidos por usuario   | No   |
+| PATCH  | `/order/:id`            | Actualizar pedido     | No   |
+| DELETE | `/order/:id`            | Eliminar pedido       | No   |
+
+### Items de Pedido (`/order-item`)
+
+| Método | Endpoint          | Descripción         | Auth |
+| ------ | ----------------- | ------------------- | ---- |
+| POST   | `/order-item`     | Crear item          | No   |
+| GET    | `/order-item`     | Listar items        | No   |
+| GET    | `/order-item/:id` | Obtener item por ID | No   |
+| PATCH  | `/order-item/:id` | Actualizar item     | No   |
+| DELETE | `/order-item/:id` | Eliminar item       | No   |
+
+## Configuración
+
+### Variables de Entorno
+
+Copia `.env.example` a `.env` y configura:
+
+```env
+# Conexión a PostgreSQL
+DB_TYPE=postgresql
+DB_USER=tu_usuario
+DB_PASS=tu_contraseña
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=nombre_db
+DATABASE_URL="${DB_TYPE}://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?schema=public"
+
+# Administrador
+ADMIN_USER=admin@gmail.com
+ADMIN_PASS=password
+
+# JWT
+JWT_SECRET=tu_secreto_jwt
+JWT_REFRESH=tu_secreto_refresh
 ```
 
-## Run tests
+### Generación de Secretos JWT
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+openssl rand -base64 64
 ```
 
-## Deployment
+## Instalación y Ejecución
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Requisitos Previos
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- Node.js (v18+)
+- pnpm (recomendado) o npm
+- PostgreSQL
+
+### Instalación
 
 ```bash
-$ pnpm install -g mau
-$ mau deploy
+# Instalar dependencias
+pnpm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Configuración de Base de Datos
 
-## Resources
+```bash
+# Crear migraciones
+pnpm prisma migrate dev --name init
 
-Check out a few resources that may come in handy when working with NestJS:
+# (Opcional) Poblar con datos de ejemplo
+pnpm seed
+pnpm seed:products
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Ejecutar el Proyecto
 
-## Support
+```bash
+# Desarrollo (con hot-reload)
+pnpm run start:dev
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Producción
+pnpm run start:prod
+```
 
-## Stay in touch
+El servidor estará disponible en `http://localhost:5000`
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Documentación Swagger
 
-## License
+Accede a `http://localhost:5000/api` para ver la documentación interactiva de la API.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Testing
 
-## Guía Completa para Desarrollar un Backend
+```bash
+# Tests unitarios
+pnpm run test
 
-Esta guía te mostrará cómo desarrollar un backend desde cero, paso a paso.
+# Tests con watch
+pnpm run test:watch
 
-### Paso 1: Preparación y Requisitos
-- Instala Node.js (preferentemente la versión LTS) y pnpm o npm.
-- Instala el Nest CLI globalmente:
-  ```bash
-  npm install -g @nestjs/cli
-  ```
-- Prepara una base de datos PostgreSQL u otra de tu preferencia.
-- Configura un entorno de desarrollo (VSCode, Git, etc).
+# Coverage
+pnpm run test:cov
 
-### Paso 2: Inicialización del Proyecto
-- Crea un nuevo proyecto usando Nest CLI:
-  ```bash
-  nest new proyecto_backend
-  ```
-- Ingresa al directorio del proyecto:
-  ```bash
-  cd proyecto_backend
-  ```
-- Instala Prisma y sus dependencias:
-  ```bash
-  pnpm add prisma @prisma/client
-  pnpm prisma init
-  ```
-- Configura el archivo ".env" agregando la URL de conexión a la base de datos.
+# Tests e2e
+pnpm run test:e2e
+```
 
-### Paso 3: Configuración de la Base de Datos y Prisma
-- Define tu modelo de datos en "prisma/schema.prisma". Ejemplo:
-  ```prisma
-  model User {
-    id    String @id @default(uuid())
-    name  String
-    email String @unique
-    // ...otros campos si es necesario...
-  }
-  ```
-- Ejecuta la migración de Prisma:
-  ```bash
-  pnpm prisma migrate dev --name init
-  ```
+## Linting
 
-### Paso 4: Creación de Módulos y Estructura del Proyecto
-- Genera los módulos necesarios:
-  ```bash
-  nest generate module user
-  nest generate module product
-  nest generate module order
-  nest generate module order-item
-  nest generate module auth
-  ```
-- Dentro de cada módulo, crea controladores y servicios:
-  ```bash
-  nest generate controller user
-  nest generate service user
-  ```
-- Organiza la estructura de carpetas para mantener un código modular y mantenible.
+```bash
+# Ejecutar linter
+pnpm run lint
+```
 
-### Paso 5: Implementación de Servicios y Controladores
-- En los servicios, implementa la lógica de negocio utilizando Prisma; por ejemplo, en "src/user/user.service.ts":
-  ```ts
-  async create(createUserDto: CreateUserDto) {
-    return await this.prisma.user.create({ data: createUserDto });
-  }
-  ```
-- Define endpoints REST en los controladores y asegúrate de inyectar correctamente los servicios.
+## Características de Seguridad Implementadas
 
-### Paso 6: Autenticación y Seguridad
+1. **Contraseñas hasheadas**: Uso de bcrypt con salt rounds = 10.
+2. **Tokens JWT**: Expiración de 30 minutos (configurable).
+3. **Cookies HTTP-only**: Los tokens se almacenan en cookies seguras no accesibles desde JavaScript.
+4. **CORS configurado**: Solo permite orígenes específicos (frontend en producción y localhost).
+5. **Validación de DTOs**: Uso de class-validator y class-transformer con whitelist.
+6. **Protección de rutas**: Guards JWT para endpoints protegidos.
 
-Esta sección está basada en la implementación de autenticación y seguridad desarrollada en este proyecto y cubre los siguientes aspectos:
+## Decisiones de Diseño
 
-1. Instalación y librerías:  
-   Se utilizan las siguientes librerías para gestionar JWT, estrategias de Passport, manejo de contraseñas y cookies:
-   ```bash
-   pnpm add @nestjs/jwt passport passport-jwt bcrypt cookie-parser
-   ```
+1. **Patrón Repository**: Uso directo de PrismaService en los servicios para simplicidad.
+2. **Módulos separados**: Arquitectura modular de NestJS para mejor organización.
+3. **DTOs con validación**: Cada endpoint usa DTOs con decoradores de class-validator.
+4. **Soft delete no implementado**: Eliminación física en cascada.
+5. **Cookies para autenticación**: Preferidas sobre localStorage por seguridad (XSS).
 
-2. Configuración del módulo de autenticación:  
-   Se crea un módulo en "src/auth/auth.module.ts" que importa:
-   - JwtModule configurado con un secreto y opciones de expiración.
-   - PassportModule para gestionar estrategias de autenticación.
-   - El AuthService, que se encarga de validar usuarios, generar tokens (en "src/auth/auth.service.ts") y registrar nuevos usuarios con contraseña encriptada usando bcrypt.
+## Extensiones Futuras
 
-3. Estrategia JWT y Guard:  
-   - Se define un JWT Strategy (por ejemplo, en "src/auth/jwt.strategy.ts") para extraer el token desde los headers o cookies.
-   - Se implementa un AuthGuard (ver "src/auth/auth.guard.ts") que utiliza Passport para verificar el token.  
-     Este guard extrae el token:
-       - Primero desde las cookies (configuradas en "src/main.ts" mediante cookie-parser).
-       - Luego desde el header "Authorization" si no se encuentra en las cookies.
-     Si el token es válido, se inyecta la información del usuario en la request.
-
-4. Manejo de inicio de sesión, registro y logout:  
-   - El endpoint de login en "src/auth/auth.controller.ts" utiliza el AuthService para:
-     - Validar las credenciales comparando la contraseña proporcionada con el hash almacenado (bcrypt).
-     - Generar un token JWT con datos del usuario (id, nombre, rol) y enviarlo mediante una cookie segura (httpOnly, secure en producción).
-   - El endpoint de registro crea un nuevo usuario, aplicando bcrypt para hashear la contraseña.
-   - El endpoint de logout limpia la cookie de autenticación.
-
-5. Protección de rutas:  
-   - Se utilizan Guards en rutas sensibles. Por ejemplo, en "src/auth/auth.controller.ts" se protege el endpoint que devuelve la información del usuario usando `@UseGuards(AuthGuard)`.
-   - En otros módulos, se puede aplicar el mismo guard (por ejemplo, descomentando la línea `@UseGuards(AuthGuard)` en "src/user/user.controller.ts") para restringir el acceso.
-
-6. Consideraciones adicionales de seguridad:  
-   - El uso de pipes de validación globales (en "src/main.ts") y DTOs asegura que los datos recibidos sean sanitizados.
-   - La configuración de CORS y variables de entorno (por ejemplo, JWT_SECRET en ".env") ayuda a mantener la seguridad en producción.
-
-Esta implementación garantiza que todo el flujo de autenticación se integre de manera coherente y segura en el proyecto, sirviendo como base para reutilizar en futuros desarrollos.
-
-### Paso 7: Validación, Pruebas y Documentación
-- Aplica un pipe de validación global (ValidationPipe) en "src/main.ts":
-  ```ts
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-  ```
-- Escribe pruebas unitarias e integrales usando Jest. Revisa ejemplos en archivos como "src/product/product.service.spec.ts".
-- Integra Swagger para documentar la API:
-  ```ts
-  const config = new DocumentBuilder().setTitle('E-Commerce App').build();
-  SwaggerModule.setup('api', app, SwaggerModule.createDocument(app, config));
-  ```
-
-### Paso 8: Despliegue y Escalabilidad
-- Configura CORS, variables de entorno y ajustes de producción (ver "src/main.ts").
-- Consulta la documentación oficial de NestJS para optimizaciones y despliegue en producción.
-- Considera plataformas como Mau para desplegar en AWS.
-
-### Paso 9: Reutilización y Mantenimiento
-- Mantén una estructura modular, desacoplada y documentada.
-- Extrae configuraciones y lógica común en archivos o módulos reutilizables.
-- Utiliza el proyecto como plantilla para futuros desarrollos ajustando solo las partes específicas del dominio.
+- Implementar refresh tokens
+- Agregar paginación a los endpoints de listados
+- Implementar roles (ADMIN/USER) en los guards
+- Agregar upload de imágenes
+- Implementar notificaciones por email
+- Agregar logs con Winston
+- Implementar rate limiting
