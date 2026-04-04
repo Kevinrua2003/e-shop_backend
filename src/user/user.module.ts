@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/main';
+import { PrismaService } from 'src/app.module';
 
 @Module({
   controllers: [UserController],

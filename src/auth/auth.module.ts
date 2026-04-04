@@ -5,7 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { PrismaService } from 'src/main';
+import { PrismaService } from 'src/app.module';
 
 @Module({
   providers: [AuthService, UserService, PrismaService],
