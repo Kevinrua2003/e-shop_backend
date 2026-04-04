@@ -2,7 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 import * as cookieParser from 'cookie-parser'
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+	async onModuleInit() {
+		await this.$connect();
+	}
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
